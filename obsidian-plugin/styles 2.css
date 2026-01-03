@@ -1,0 +1,286 @@
+/**
+ * Inverted Mirror Editor - Obsidian Plugin Styles
+ * Created: 2025-12-25
+ *
+ * Implements the same visual style as the web version
+ * but adapted for Obsidian's interface
+ */
+
+/* ==================== Container ==================== */
+.inverted-mirror-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+}
+
+/* ==================== Header ==================== */
+.inverted-mirror-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.inverted-mirror-header h4 {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+/* ==================== Toolbar ==================== */
+.inverted-mirror-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--background-modifier-border);
+    flex-wrap: wrap;
+}
+
+.inverted-mirror-toolbar button {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid var(--background-modifier-border);
+    background-color: var(--interactive-normal);
+    color: var(--text-normal);
+    transition: all 0.2s ease;
+}
+
+.inverted-mirror-toolbar button:hover {
+    background-color: var(--interactive-hover);
+}
+
+.inverted-mirror-toolbar button.mod-cta {
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+}
+
+.inverted-mirror-toolbar button.mod-warning {
+    background-color: var(--text-error);
+    color: white;
+}
+
+/* ==================== Editor Wrapper ==================== */
+.inverted-mirror-editor-wrapper {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    background-color: var(--background-primary);
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+/* ==================== Fixed Point Markers ==================== */
+.fixed-point-marker {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: var(--text-error);
+    font-size: 1.25rem;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 10;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.fixed-cursor-marker {
+    position: absolute;
+    top: 12px;
+    right: 32px;
+    color: var(--text-error);
+    font-size: 1.25rem;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 10;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
+
+@keyframes blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+/* ==================== Editor ==================== */
+.inverted-mirror-editor {
+    height: 100%;
+    padding: 16px;
+    padding-right: 3.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column-reverse;  /* Lines appear bottom-to-top */
+
+    font-family: var(--font-monospace);
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-normal);
+
+    outline: none;
+    transition: transform 0.3s ease;
+}
+
+.inverted-mirror-editor:focus {
+    background-color: var(--background-primary-alt);
+}
+
+/* Horizontal mirror mode - flips entire display */
+.inverted-mirror-editor.mirrored {
+    transform: scaleX(-1);
+}
+
+/* ==================== Editor Lines ==================== */
+.editor-line {
+    min-height: 1.8rem;
+    font-family: var(--font-monospace);
+    text-align: right;
+    direction: rtl;  /* Right-to-left text flow */
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    padding: 2px 4px;
+    border-radius: 2px;
+    transition: background-color 0.15s ease;
+}
+
+.editor-line.current-line {
+    background-color: var(--background-primary-alt);
+    border: 1px solid var(--text-accent);
+    border-right: 3px solid var(--text-accent);
+}
+
+/* ==================== Editor Text ==================== */
+.editor-text {
+    display: inline-block;
+    white-space: pre;
+    /* Text is normal, CSS handles RTL display */
+}
+
+/* ==================== Mirrored Characters ==================== */
+.mirrored-char {
+    display: inline-block;
+    transform: scaleX(1); /* Normal by default */
+    white-space: pre;
+    transition: transform 0.3s ease;
+}
+
+/* Optimized text rendering - applies to entire text block */
+.mirrored-text {
+    display: inline-block;
+    white-space: pre;
+    /* No transform - text is already reversed in JavaScript */
+}
+
+/* Mirror characters mode - characters appear mirrored */
+.inverted-mirror-editor.mirrored-chars .mirrored-char {
+    transform: scaleX(-1);
+}
+
+/* ==================== Stats ==================== */
+.inverted-mirror-stats {
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    background-color: var(--background-secondary);
+    text-align: center;
+}
+
+/* ==================== Scrollbar ==================== */
+.inverted-mirror-editor::-webkit-scrollbar {
+    width: 10px;
+}
+
+.inverted-mirror-editor::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+}
+
+.inverted-mirror-editor::-webkit-scrollbar-thumb {
+    background: var(--background-modifier-border);
+    border-radius: 5px;
+}
+
+.inverted-mirror-editor::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 768px) {
+    .inverted-mirror-toolbar {
+        gap: 4px;
+    }
+
+    .inverted-mirror-toolbar button {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}
+
+/* ==================== Accessibility ==================== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .fixed-point-marker,
+    .fixed-cursor-marker {
+        animation: none;
+    }
+}
+
+/* ==================== Editor Mode (In-Note Inverted Mode) ==================== */
+/* Applied when inverted mode is active in the main editor */
+
+.inverted-mirror-editor-mode {
+    direction: rtl !important;
+    text-align: right !important;
+    background-color: var(--background-primary-alt) !important;
+    border: 2px solid var(--text-accent) !important;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.inverted-mirror-editor-mode .cm-line {
+    direction: rtl !important;
+    text-align: right !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    unicode-bidi: bidi-override !important;
+}
+
+.inverted-mirror-editor-mode .cm-content {
+    direction: rtl !important;
+}
+
+.inverted-mirror-editor-mode .cm-scroller {
+    direction: rtl !important;
+}
+
+/* Visual indicator that inverted mode is active */
+.inverted-mirror-editor-mode::before {
+    content: "▶ INVERTED MIRROR MODE ACTIVE";
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    background: var(--text-accent);
+    color: var(--text-on-accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 1000;
+    pointer-events: none;
+}

@@ -1,0 +1,488 @@
+/**
+ * Inverted Mirror Editor - Styles
+ * Created: 2025-12-25
+ *
+ * Key features:
+ * - Horizontal text mirroring (transform: scaleX(-1))
+ * - Fixed write point at top-left
+ * - Clean, modern interface
+ */
+
+/* ==================== CSS Reset & Base ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color Palette */
+    --color-primary: #3b82f6;
+    --color-primary-hover: #2563eb;
+    --color-secondary: #6b7280;
+    --color-secondary-hover: #4b5563;
+    --color-danger: #ef4444;
+    --color-danger-hover: #dc2626;
+    --color-success: #10b981;
+
+    /* Neutrals */
+    --color-bg: #ffffff;
+    --color-bg-secondary: #f9fafb;
+    --color-bg-tertiary: #f3f4f6;
+    --color-text: #111827;
+    --color-text-secondary: #6b7280;
+    --color-border: #e5e7eb;
+
+    /* Editor */
+    --color-editor-bg: #fefefe;
+    --color-editor-border: #d1d5db;
+    --color-fixed-point: #ef4444;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+
+    /* Typography */
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "SF Mono", Monaco, "Cascadia Code", "Courier New", monospace;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==================== Header ==================== */
+.header {
+    background-color: var(--color-bg);
+    border-bottom: 2px solid var(--color-border);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.nav-links {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.nav-links a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+/* ==================== Main Container ==================== */
+.main-container {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: var(--spacing-xl);
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+}
+
+/* ==================== Editor ==================== */
+.editor-wrapper {
+    position: relative;
+    background-color: var(--color-editor-bg);
+    border: 2px solid var(--color-editor-border);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+}
+
+.fixed-point-marker {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: var(--color-fixed-point);
+    font-size: 1.25rem;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 10;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.fixed-cursor-marker {
+    position: absolute;
+    top: 12px;
+    right: 32px;
+    color: var(--color-fixed-point);
+    font-size: 1.25rem;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 10;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
+
+@keyframes blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+.editor {
+    /* Layout */
+    flex: 1;
+    padding: var(--spacing-lg);
+    padding-right: 3.5rem; /* Space for cursor/fixed point on right */
+    padding-left: var(--spacing-lg);
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+
+    /* Display lines in order: first in array = top */
+    display: flex;
+    flex-direction: column;
+
+    /* Typography */
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-text);
+
+    /* Focus */
+    outline: none;
+
+    /* Text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Smooth transition for mirror toggle */
+    transition: transform 0.3s ease;
+}
+
+/* Horizontal mirror mode - flips entire display */
+.editor.mirrored {
+    transform: scaleX(-1);
+}
+
+.editor:focus {
+    background-color: #fcfcfc;
+}
+
+/* Individual lines in the editor */
+.editor-line {
+    min-height: 1.8rem;
+    font-family: var(--font-mono);
+    text-align: right; /* Align text to right */
+    display: flex;
+    justify-content: flex-end; /* Align to right */
+    flex-wrap: nowrap;
+}
+
+/* Characters - default is normal (not mirrored) */
+.mirrored-char {
+    display: inline-block;
+    transform: scaleX(1); /* Normal by default */
+    white-space: pre; /* Preserve spaces */
+    transition: transform 0.3s ease; /* Smooth transition */
+}
+
+/* Mirror characters mode - characters appear mirrored */
+.editor.mirrored-chars .mirrored-char {
+    transform: scaleX(-1); /* Mirrored when toggled */
+}
+
+/* Current line (newest) - position it so right edge aligns with cursor */
+.editor-line.current-line {
+    /* First line always at top */
+}
+
+/* Empty editor placeholder */
+.editor:empty:before {
+    content: "Start typing... Characters appear after the fixed point (▶) and grow to the right.";
+    color: var(--color-text-secondary);
+    font-style: italic;
+    pointer-events: none;
+    white-space: normal;
+}
+
+/* Scrollbar Styling */
+.editor::-webkit-scrollbar {
+    width: 10px;
+}
+
+.editor::-webkit-scrollbar-track {
+    background: var(--color-bg-tertiary);
+}
+
+.editor::-webkit-scrollbar-thumb {
+    background: var(--color-secondary);
+    border-radius: 5px;
+}
+
+.editor::-webkit-scrollbar-thumb:hover {
+    background: var(--color-secondary-hover);
+}
+
+/* ==================== Control Panel ==================== */
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.controls-section {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.controls-section h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+/* ==================== Buttons ==================== */
+.btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-secondary-hover);
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: var(--color-danger-hover);
+}
+
+/* ==================== Statistics ==================== */
+.stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-sm);
+    background-color: var(--color-bg-tertiary);
+    border-radius: 4px;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    font-weight: 600;
+    font-family: var(--font-mono);
+}
+
+/* ==================== Help Section ==================== */
+.help-text {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+}
+
+.help-text ul {
+    list-style: none;
+    padding: 0;
+}
+
+.help-text li {
+    padding: var(--spacing-xs) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.help-text li:last-child {
+    border-bottom: none;
+}
+
+.help-text strong {
+    color: var(--color-text);
+}
+
+/* ==================== Footer ==================== */
+.footer {
+    background-color: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-md) var(--spacing-xl);
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+}
+
+.footer a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 1024px) {
+    .main-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    .control-panel {
+        order: -1; /* Move controls above editor on mobile */
+    }
+
+    .editor-wrapper {
+        min-height: 400px;
+    }
+}
+
+@media (max-width: 640px) {
+    .header {
+        padding: var(--spacing-md);
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .main-container {
+        padding: var(--spacing-md);
+        gap: var(--spacing-md);
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+    }
+
+    .button-group {
+        gap: var(--spacing-xs);
+    }
+}
+
+/* ==================== Accessibility ==================== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .fixed-point-marker {
+        animation: none;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .header,
+    .control-panel,
+    .footer,
+    .fixed-point-marker {
+        display: none;
+    }
+
+    .editor {
+        transform: scaleX(1); /* Unmirror for printing */
+        border: 1px solid #000;
+    }
+
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+}

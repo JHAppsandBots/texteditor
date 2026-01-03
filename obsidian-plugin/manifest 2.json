@@ -1,0 +1,11 @@
+{
+	"id": "inverted-mirror-editor",
+	"name": "Inverted Mirror Editor",
+	"version": "0.1.0",
+	"minAppVersion": "0.15.0",
+	"description": "Revolutionary text editor with fixed write point at top-right. New text appears at a fixed position while old text flows away. Perfect for writing with constant context awareness.",
+	"author": "Johannes Hahn",
+	"authorUrl": "",
+	"fundingUrl": "",
+	"isDesktopOnly": false
+}

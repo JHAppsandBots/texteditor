@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inverted Mirror Editor</title>
+    <meta name="description" content="An experimental text editor with fixed write point and mirrored display">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="title">Inverted Mirror Editor</h1>
+            <p class="subtitle">Stack-based writing with mirrored display</p>
+            <nav class="nav-links">
+                <a href="../README.md" target="_blank">README</a>
+                <a href="../docs/SPECIFICATION.md" target="_blank">Specification</a>
+                <a href="../docs/DOCUMENTATION_GUIDE.md" target="_blank">Docs Guide</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Editor Area -->
+    <main class="main-container">
+        <!-- Editor Display (mirrored) -->
+        <div class="editor-wrapper">
+            <div class="fixed-point-marker" aria-hidden="true">▶</div>
+            <div class="fixed-cursor-marker" aria-hidden="true">|</div>
+            <div id="editor"
+                 class="editor"
+                 spellcheck="false"
+                 role="textbox"
+                 aria-label="Inverted Mirror Editor - Text appears mirrored"
+                 aria-multiline="true"
+                 tabindex="0">
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <aside class="control-panel">
+            <section class="controls-section">
+                <h2>Content Management</h2>
+                <div class="button-group">
+                    <button id="clearBtn" class="btn btn-danger" title="Delete all content">
+                        Clear All
+                    </button>
+                    <button id="copyBtn" class="btn btn-primary" title="Copy unmirrored text to clipboard">
+                        Copy Raw
+                    </button>
+                </div>
+            </section>
+
+            <section class="controls-section">
+                <h2>File Operations</h2>
+                <div class="button-group">
+                    <button id="exportBtn" class="btn btn-secondary" title="Export as inverted mirror text file">
+                        Export Inverted (.txt)
+                    </button>
+                    <button id="exportNormalBtn" class="btn btn-secondary" title="Export as normal readable text file">
+                        Export Normal (.txt)
+                    </button>
+                    <label for="importFile" class="btn btn-secondary" title="Import text file">
+                        Import (.txt)
+                        <input type="file"
+                               id="importFile"
+                               accept=".txt,text/plain"
+                               style="display: none;">
+                    </label>
+                </div>
+            </section>
+
+            <section class="controls-section">
+                <h2>Display Options</h2>
+                <div class="button-group">
+                    <button id="mirrorToggle" class="btn btn-secondary" title="Toggle horizontal mirror of entire display">
+                        🔄 Mirror Display
+                    </button>
+                    <button id="charMirrorToggle" class="btn btn-secondary" title="Toggle mirroring of individual characters">
+                        🔤 Mirror Characters
+                    </button>
+                </div>
+            </section>
+
+            <section class="controls-section">
+                <h2>Statistics</h2>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Characters:</span>
+                        <span id="charCount" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Lines:</span>
+                        <span id="lineCount" class="stat-value">1</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="controls-section">
+                <h2>Help</h2>
+                <div class="help-text">
+                    <ul>
+                        <li><strong>Type:</strong> Characters appear at top-left</li>
+                        <li><strong>Backspace:</strong> Removes newest character</li>
+                        <li><strong>Enter:</strong> Adds line break</li>
+                        <li><strong>Arrows/Click:</strong> No effect on input position</li>
+                        <li><strong>Text appears mirrored</strong> - use "Copy Raw" for normal text</li>
+                    </ul>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            Inverted Mirror Editor v0.1.0-alpha |
+            Created: 2025-12-25 |
+            <a href="../CHANGELOG.md" target="_blank">Changelog</a>
+        </p>
+    </footer>
+
+    <!-- Hidden textarea for clipboard operations -->
+    <textarea id="clipboardHelper"
+              style="position: absolute; left: -9999px;"
+              aria-hidden="true"></textarea>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
